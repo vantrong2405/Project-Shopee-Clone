@@ -1,8 +1,14 @@
+import { watch } from 'fs';
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { formData } from 'src/type/@type';
+import { getRules } from 'src/utils/rules';
 
 export default function Login() {
-  const { register, handleSubmit, formState: { errors } } = useForm()
+  const { register, handleSubmit, formState: { errors }, getValues, watch } = useForm<formData>()
+
+  const email = getValues('email')
+  const rules = getRules()
   const onSubmit = handleSubmit((data) => {
     console.log(data);
   })
@@ -15,10 +21,10 @@ export default function Login() {
               <div className='text-2xl'>Đăng nhập</div>
               <div className='mt-8'>
                 <input
-                  type='email'
+                  type='text'
                   className='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                   placeholder='Email'
-                  {...register('email')}
+                  {...register('email', rules.email)}
                 />
                 <div className='mt-1 text-red-600 min-h-[1rem] text-sm'></div>
               </div>
@@ -27,7 +33,8 @@ export default function Login() {
                   type='password'
                   className='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                   placeholder='Password'
-                  {...register('password')}
+                  {...register('password', rules.password)}
+                  autoComplete='on'
                 />
                 <div className='mt-1 text-red-600 min-h-[1rem] text-sm'></div>
               </div>
