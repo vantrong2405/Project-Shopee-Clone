@@ -1,16 +1,47 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import Input from 'src/Components/Input';
 import { formData } from 'src/type/@type';
 import { getRules, schema } from 'src/utils/rules';
+import { registerAccount } from 'src/apis/auth.api';
+import { omit } from 'lodash';
+import { isAxiosUnprocessableEntityError } from 'src/utils/utils';
+import { RespponseApi } from 'src/type/utils.type';
+
 export default function Register() {
-  const { register, handleSubmit, formState: { errors }, getValues } = useForm<formData>({
+  const { register, handleSubmit, formState: { errors }, getValues, setError } = useForm<formData>({
     resolver: yupResolver(schema),
   });
-  // const rules = getRules(getValues);
+
+  const registerAccountMutation = useMutation({
+    mutationFn: (body: Omit<formData, 'confirm_password'>) => registerAccount(body)
+  });
+
   const onSubmit = handleSubmit((data) => {
-    // Xử lý dữ liệu khi form được submit
+    const body = omit(data, ['confirm_password']);
+    registerAccountMutation.mutate(body, {
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onError: (error) => {
+        console.log(error);
+
+        if (isAxiosUnprocessableEntityError<RespponseApi<Omit<formData, 'confirm_password'>>>(error)) {
+          const formError = error.response?.data.data;
+
+          if (formError) {
+            Object.keys(formError).forEach((key) => {
+              setError(key as keyof Omit<formData, 'confirm_password'>, {
+                message: formError[key as keyof Omit<formData, 'confirm_password'>] as string,
+                type: 'Server'
+              });
+            });
+          }
+        }
+      }
+    });
   });
 
   return (
@@ -24,10 +55,9 @@ export default function Register() {
                 name='email'
                 register={register}
                 type='email'
-                errorMessage={errors.email?.message} // Sửa từ errors.password sang errors.email
+                errorMessage={errors.email?.message}
                 className='mt-8'
-                // rules={rules.email}
-                placeholder='Email' // Thêm placeholder cho input
+                placeholder='Email'
               />
               <Input
                 name='password'
@@ -35,8 +65,7 @@ export default function Register() {
                 type='password'
                 errorMessage={errors.password?.message}
                 className='mt-2'
-                // rules={rules.password}
-                placeholder='Password' // Thêm placeholder cho input
+                placeholder='Password'
               />
               <Input
                 name='confirm_password'
@@ -44,8 +73,7 @@ export default function Register() {
                 type='password'
                 errorMessage={errors.confirm_password?.message}
                 className='mt-2'
-                // rules={rules.confirm_password}
-                placeholder='Confirm Password' // Thêm placeholder cho input
+                placeholder='Confirm Password'
               />
               <div className='mt-2'>
                 <button className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600'>
@@ -63,5 +91,5 @@ export default function Register() {
         </div>
       </div>
     </div>
-  )
+  );
 }
