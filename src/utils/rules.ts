@@ -1,7 +1,6 @@
-import { formData } from 'src/type/@type'
 import type { RegisterOptions, UseFormGetValues } from 'react-hook-form'
 import * as yup from 'yup';
-type Rules = { [key in keyof formData]?: RegisterOptions<formData> }
+type Rules = { [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions }
 export const getRules = (getValues?: any): Rules => {
   return {
     email: {
@@ -66,5 +65,5 @@ export const schema = yup.object({
     .oneOf([yup.ref('password')], 'Nhập lại password không khớp')
 })
 
-export const loginSchema = schema.omit(['confirm_password'])
+
 export type Schema = yup.InferType<typeof schema>
