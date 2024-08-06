@@ -1,11 +1,15 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { watch } from 'fs';
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import Input from 'src/Components/Input';
 import { formData } from 'src/type/@type';
-import { getRules } from 'src/utils/rules';
-
+import { getRules, loginSchema } from 'src/utils/rules';
+type loginFormData = Omit<formData, 'confirm_password'>
 export default function Login() {
-  const { register, handleSubmit, formState: { errors }, getValues, watch } = useForm<formData>()
+  const { register, handleSubmit, formState: { errors }, getValues, watch } = useForm<any>({
+    resolver: yupResolver(loginSchema)
+  })
 
   const email = getValues('email')
   const rules = getRules()
@@ -19,25 +23,9 @@ export default function Login() {
           <div className='lg:col-span-2 lg:col-start-4'>
             <form className='p-10 rounded bg-white shadow-sm' onSubmit={onSubmit}>
               <div className='text-2xl'>Đăng nhập</div>
-              <div className='mt-8'>
-                <input
-                  type='text'
-                  className='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-                  placeholder='Email'
-                  {...register('email', rules.email)}
-                />
-                <div className='mt-1 text-red-600 min-h-[1rem] text-sm'></div>
-              </div>
-              <div className='mt-3'>
-                <input
-                  type='password'
-                  className='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-                  placeholder='Password'
-                  {...register('password', rules.password)}
-                  autoComplete='on'
-                />
-                <div className='mt-1 text-red-600 min-h-[1rem] text-sm'></div>
-              </div>
+
+              <Input type='email' className='mt-8' placeholder='Email' register={register} rules={rules.email} name='email' />
+              <Input type='password' className='mt-3' placeholder='Password' register={register} rules={rules.password} name='password' />
               <div className='mt-3'>
                 <button type='submit' className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600'>
                   Đăng nhập

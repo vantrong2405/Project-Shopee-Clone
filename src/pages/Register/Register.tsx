@@ -1,15 +1,17 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom'
+import Input from 'src/Components/Input';
 import { formData } from 'src/type/@type';
-import { getRules } from 'src/utils/rules';
-
-
+import { getRules, schema } from 'src/utils/rules';
 export default function Register() {
-  const { register, handleSubmit, formState: { errors }, getValues } = useForm<formData>()
-  const rules = getRules(getValues)
+  const { register, handleSubmit, formState: { errors }, getValues } = useForm<formData>({
+    resolver: yupResolver(schema),
+  });
+  // const rules = getRules(getValues);
   const onSubmit = handleSubmit((data) => {
-  })
-
+    // Xử lý dữ liệu khi form được submit
+  });
 
   return (
     <div className='bg-orange'>
@@ -18,35 +20,33 @@ export default function Register() {
           <div className='lg:col-span-2 lg:col-start-4'>
             <form className='p-10 rounded bg-white shadow-sm' onSubmit={onSubmit}>
               <div className='text-2xl'>Đăng ký</div>
-              <div className='mt-8'>
-                <input
-                  type='text'
-                  className='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-                  placeholder='Email'
-                  {...register('email', rules.email)}
-                />
-                <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm text-start'>{errors.email?.message}</div>
-              </div>
-              <div className='mt-2'>
-                <input
-                  type='password'
-                  className='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-                  placeholder='Password'
-                  autoComplete='on'
-                  {...register('password', rules.password)}
-                />
-                <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm text-start'>{errors.password?.message}</div>
-              </div>
-              <div className='mt-2'>
-                <input
-                  type='password'
-                  className='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-                  placeholder='Confirm Password'
-                  autoComplete='on'
-                  {...register('confirm_password', { ...rules.confirm_password })}
-                />
-                <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm text-start'>{errors.confirm_password?.message}</div>
-              </div>
+              <Input
+                name='email'
+                register={register}
+                type='email'
+                errorMessage={errors.email?.message} // Sửa từ errors.password sang errors.email
+                className='mt-8'
+                // rules={rules.email}
+                placeholder='Email' // Thêm placeholder cho input
+              />
+              <Input
+                name='password'
+                register={register}
+                type='password'
+                errorMessage={errors.password?.message}
+                className='mt-2'
+                // rules={rules.password}
+                placeholder='Password' // Thêm placeholder cho input
+              />
+              <Input
+                name='confirm_password'
+                register={register}
+                type='password'
+                errorMessage={errors.confirm_password?.message}
+                className='mt-2'
+                // rules={rules.confirm_password}
+                placeholder='Confirm Password' // Thêm placeholder cho input
+              />
               <div className='mt-2'>
                 <button className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600'>
                   Đăng ký
