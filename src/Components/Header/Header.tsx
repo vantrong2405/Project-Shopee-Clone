@@ -1,10 +1,23 @@
 import { Link } from 'react-router-dom';
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import Popover from '../Poppover';
+import { useMutation } from '@tanstack/react-query';
+import { logoutAccount } from 'src/apis/auth.api';
+import { themeContext } from 'src/context/app.context';
 
 
 export default function Header() {
+  const { isAuthenicated, setIsAuthenicated } = useContext(themeContext)
+  const logoutMutation = useMutation({
+    mutationFn: logoutAccount,
+    onSuccess: () => {
+      setIsAuthenicated(false)
+    }
 
+  })
+  const handleLogout = () => {
+    logoutMutation.mutate()
+  }
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
       <div className='container'>
@@ -42,7 +55,7 @@ export default function Header() {
               <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
             </svg>
           </Popover>
-          <Popover
+          {isAuthenicated && <Popover
             className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'
             renderPopover={
               <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
@@ -58,7 +71,7 @@ export default function Header() {
                 >
                   Đơn mua
                 </Link>
-                <button className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'>
+                <button className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left' onClick={handleLogout}>
                   Đăng xuất
                 </button>
               </div>
@@ -73,7 +86,14 @@ export default function Header() {
               </div>
               <div>duthanhduoc</div>
             </div>
-          </Popover>
+          </Popover>}
+          {!isAuthenicated &&
+            <div className='flex items-center mx-4'>
+              <Link className='block text-white hover:opacity-80' to={'/register'}>Register</Link>
+              <div className='border-r-2 h-4 border-white mx-2'></div>
+              <Link className='block text-white hover:opacity-80' to={'/login'}>Login</Link>
+            </div>
+          }
         </div>
         <div className='grid grid-cols-12 gap-4 mt-4 items-end'>
           <Link to='/' className='col-span-2'>

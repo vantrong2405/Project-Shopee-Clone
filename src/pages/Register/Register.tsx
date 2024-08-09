@@ -1,17 +1,22 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Input from 'src/Components/Input';
 import { getRules, schema, Schema } from 'src/utils/rules';
 import { registerAccount } from 'src/apis/auth.api';
 import { omit } from 'lodash';
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils';
 import { RespponseApi } from 'src/type/utils.type';
+import { themeContext } from 'src/context/app.context';
+import { useContext } from 'react';
+import Button from 'src/Components/Button';
 
 type FormData = Schema
 
 export default function Register() {
+  const { isAuthenicated, setIsAuthenicated } = useContext(themeContext)
+  const navigate = useNavigate()
   const { register, handleSubmit, formState: { errors }, getValues, setError } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
@@ -23,8 +28,9 @@ export default function Register() {
   const onSubmit = handleSubmit((data) => {
     const body = omit(data, ['confirm_password']);
     registerAccountMutation.mutate(body, {
-      onSuccess: (data) => {
-        console.log(data);
+      onSuccess: () => {
+        setIsAuthenicated(true)
+        navigate('/')
       },
       onError: (error) => {
         console.log(error);
@@ -77,9 +83,9 @@ export default function Register() {
                 placeholder='Confirm Password'
               />
               <div className='mt-2'>
-                <button className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600'>
-                  Đăng ký
-                </button>
+                <Button disabled={registerAccountMutation.isPending} isLoading={registerAccountMutation.isPending} type='submit' className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center'>
+                  Đăng nhập
+                </Button>
               </div>
               <div className='flex items-center justify-center mt-8'>
                 <span className='text-gray-400'>Bạn đã có tài khoản?</span>
