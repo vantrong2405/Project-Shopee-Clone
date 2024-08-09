@@ -8,6 +8,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { loginAccount } from 'src/apis/auth.api';
 import Button from 'src/Components/Button';
 import Input from 'src/Components/Input';
+import path from 'src/constants/path';
 import { themeContext } from 'src/context/app.context';
 import { RespponseApi } from 'src/type/utils.type';
 import { getRules, Schema, schema } from 'src/utils/rules';
@@ -58,7 +59,6 @@ export default function Login() {
           <div className='lg:col-span-2 lg:col-start-4'>
             <form className='p-10 rounded bg-white shadow-sm' onSubmit={onSubmit}>
               <div className='text-2xl'>Đăng nhập</div>
-
               <Input type='email' className='mt-8' placeholder='Email' register={register} rules={rules.email} name='email' />
               <Input type='password' className='mt-3' placeholder='Password' register={register} rules={rules.password} name='password' autoComplete='on' />
               <div className='mt-3'>
@@ -66,13 +66,9 @@ export default function Login() {
                   Đăng nhập
                 </Button>
               </div>
-
-
-
-
               <div className='flex items-center justify-center mt-8'>
                 <span className='text-gray-400'>Bạn chưa có tài khoản?</span>
-                <Link className='text-red-400 ml-1' to='/register'>
+                <Link className='text-red-400 ml-1' to={path.register}>
                   Đăng ký
                 </Link>
               </div>

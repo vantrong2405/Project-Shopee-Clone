@@ -7,22 +7,23 @@ import RegisterLayout from './layouts/RegisterLayout';
 import MainLayout from './layouts/MainLayout';
 import { themeContext } from './context/app.context';
 import Profile from './Components/Profile';
+import path from './constants/path';
 
 
 const protectedAuthenicated = () => {
   const { isAuthenicated } = useContext(themeContext)
-  return isAuthenicated ? <Outlet /> : <Navigate to='/login' />
+  return isAuthenicated ? <Outlet /> : <Navigate to={path.login} />
 }
 
 const rejectAuthenicated = () => {
   const { isAuthenicated } = useContext(themeContext)
-  return !isAuthenicated ? <Outlet /> : <Navigate to='/' />
+  return !isAuthenicated ? <Outlet /> : <Navigate to={path.home} />
 }
 
 export default function useRouterElement() {
   let routerElement = useRoutes([
     {
-      path: '/',
+      path: path.home,
       element:
         <MainLayout>
           <ProductList />
@@ -34,7 +35,7 @@ export default function useRouterElement() {
       children: [
 
         {
-          path: '/profile',
+          path: path.profile,
           element:
             <MainLayout>
               <Profile />
@@ -47,14 +48,14 @@ export default function useRouterElement() {
       element: rejectAuthenicated(),
       children: [
         {
-          path: '/login',
+          path: path.login,
           element:
             <RegisterLayout>
               <Login />
             </RegisterLayout >
         },
         {
-          path: '/register',
+          path: path.register,
           element:
             <RegisterLayout>
               <Register />

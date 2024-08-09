@@ -11,6 +11,7 @@ import { RespponseApi } from 'src/type/utils.type';
 import { themeContext } from 'src/context/app.context';
 import { useContext } from 'react';
 import Button from 'src/Components/Button';
+import path from 'src/constants/path';
 
 type FormData = Schema
 
@@ -30,7 +31,7 @@ export default function Register() {
     registerAccountMutation.mutate(body, {
       onSuccess: () => {
         setIsAuthenicated(true)
-        navigate('/')
+        navigate(path.home)
       },
       onError: (error) => {
         console.log(error);
@@ -89,7 +90,7 @@ export default function Register() {
               </div>
               <div className='flex items-center justify-center mt-8'>
                 <span className='text-gray-400'>Bạn đã có tài khoản?</span>
-                <Link className='text-red-400 ml-1' to='/login'>
+                <Link className='text-red-400 ml-1' to={path.login}>
                   Đăng nhập
                 </Link>
               </div>
