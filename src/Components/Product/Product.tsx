@@ -1,6 +1,18 @@
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import productApi from 'src/apis/product.api'
+import useQueryParams from 'src/hook/useQueryParams'
 
 export default function Product() {
+  const queryParams = useQueryParams()
+  const { data } = useQuery({
+    queryKey: ['products', queryParams],
+    queryFn: () => productApi.getProducts(queryParams)
+  })
+
+  console.log(data);
+
   return (
     <Link to='/'>
       <div className='bg-white shadow rounded-sm hover:translate-y-[-0.04rem] hover:shadow-md duration-100 transition-transform overflow-hidden'>
