@@ -10,7 +10,7 @@ import Button from 'src/Components/Button';
 import Input from 'src/Components/Input';
 import path from 'src/constants/path';
 import { themeContext } from 'src/context/app.context';
-import { RespponseApi } from 'src/type/utils.type';
+import { ErrorResponse } from 'src/type/utils.type';
 import { getRules, Schema, schema } from 'src/utils/rules';
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils';
 type FormData = Omit<Schema, 'confirm_password'>
@@ -37,7 +37,7 @@ export default function Login() {
       onError: (error) => {
         console.log(error);
 
-        if (isAxiosUnprocessableEntityError<RespponseApi<FormData>>(error)) {
+        if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
           const formError = error.response?.data.data;
 
           if (formError) {
