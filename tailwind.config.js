@@ -23,5 +23,5 @@ export default {
     }),
     require('@tailwindcss/line-clamp'),
   ]
-}
+} 
 

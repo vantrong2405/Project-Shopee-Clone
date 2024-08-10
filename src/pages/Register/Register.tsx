@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from 'src/Components/Input';
 import { getRules, schema, Schema } from 'src/utils/rules';
-import { registerAccount } from 'src/apis/auth.api';
+import authApi from 'src/apis/auth.api';
 import { omit } from 'lodash';
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils';
 import { ErrorResponse } from 'src/type/utils.type';
@@ -23,7 +23,7 @@ export default function Register() {
   });
 
   const registerAccountMutation = useMutation({
-    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerAccount(body)
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => authApi.registerAccount(body)
   });
 
   const onSubmit = handleSubmit((data) => {

@@ -1,16 +1,17 @@
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Popover from '../Poppover';
 import { useMutation } from '@tanstack/react-query';
-import { logoutAccount } from 'src/apis/auth.api';
+import authApi from 'src/apis/auth.api';
 import { themeContext } from 'src/context/app.context';
 import path from 'src/constants/path';
 
-
 export default function Header() {
   const { isAuthenicated, setIsAuthenicated, profile } = useContext(themeContext)
+  const [isActive, setIsActive] = useState<boolean>(false)
+
   const logoutMutation = useMutation({
-    mutationFn: logoutAccount,
+    mutationFn: authApi.logoutAccount,
     onSuccess: () => {
       setIsAuthenicated(false)
     }
@@ -21,6 +22,7 @@ export default function Header() {
   }
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
+      <button onClick={() => setIsActive(!isActive)}>onclick</button>
       <div className='container'>
         <div className='flex justify-end'>
           <Popover className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
