@@ -7,7 +7,7 @@ import { getRules, schema, Schema } from 'src/utils/rules';
 import { registerAccount } from 'src/apis/auth.api';
 import { omit } from 'lodash';
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils';
-import { RespponseApi } from 'src/type/utils.type';
+import { ErrorResponse } from 'src/type/utils.type';
 import { themeContext } from 'src/context/app.context';
 import { useContext } from 'react';
 import Button from 'src/Components/Button';
@@ -36,7 +36,7 @@ export default function Register() {
       onError: (error) => {
         console.log(error);
 
-        if (isAxiosUnprocessableEntityError<RespponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+        if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<FormData, 'confirm_password'>>>(error)) {
           const formError = error.response?.data.data;
 
           if (formError) {
