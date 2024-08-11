@@ -8,7 +8,6 @@ import path from 'src/constants/path';
 
 export default function Header() {
   const { isAuthenicated, setIsAuthenicated, profile } = useContext(themeContext)
-  const [isActive, setIsActive] = useState<boolean>(false)
 
   const logoutMutation = useMutation({
     mutationFn: authApi.logoutAccount,
@@ -22,7 +21,6 @@ export default function Header() {
   }
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
-      <button onClick={() => setIsActive(!isActive)}>onclick</button>
       <div className='container'>
         <div className='flex justify-end'>
           <Popover className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
