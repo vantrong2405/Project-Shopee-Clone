@@ -1,4 +1,4 @@
-const path = {
+  const path = {
   home: '/',
   login: '/login',
   register: '/register',
