@@ -1,18 +1,15 @@
-import { useQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import productApi from 'src/apis/product.api'
-import useQueryParams from 'src/hook/useQueryParams'
 import { Product as ProductType } from 'src/type/product.type'
 import { formatCurrency, formatNumberToSocialStyle } from 'src/utils/utils'
 import ProductRating from '../ProductRating'
+import path from 'src/constants/path'
 
 interface Props {
   product: ProductType
 }
 export default function Product({ product }: Props) {
   return (
-    <Link to='/'>
+    <Link to={`${path.home}${product._id}`}>
       <div className='bg-white shadow rounded-sm hover:translate-y-[-0.04rem] hover:shadow-md duration-100 transition-transform overflow-hidden'>
         <div className='w-full pt-[100%] relative'>
           <img
