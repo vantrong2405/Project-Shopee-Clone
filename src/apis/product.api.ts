@@ -1,6 +1,6 @@
-import { Product, ProductList, ProductListConfig } from "src/type/product.type"
-import { SuccessResponse } from "src/type/utils.type"
-import http from "src/utils/http"
+import { Product, ProductList, ProductListConfig } from 'src/type/product.type'
+import { SuccessResponse } from 'src/type/utils.type'
+import http from 'src/utils/http'
 
 const URL = '/products'
 const productApi = {
@@ -11,6 +11,5 @@ const productApi = {
     return http.get<SuccessResponse<Product>>(`${URL}/${id}`)
   }
 }
-
 
 export default productApi

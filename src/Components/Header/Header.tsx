@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
-import Popover from '../Poppover';
-import { useMutation } from '@tanstack/react-query';
-import authApi from 'src/apis/auth.api';
-import { themeContext } from 'src/context/app.context';
-import path from 'src/constants/path';
+import { Link } from 'react-router-dom'
+import { useContext, useEffect, useState } from 'react'
+import Popover from '../Poppover'
+import { useMutation } from '@tanstack/react-query'
+import authApi from 'src/apis/auth.api'
+import { themeContext } from 'src/context/app.context'
+import path from 'src/constants/path'
 
 export default function Header() {
   const { isAuthenicated, setIsAuthenicated, profile } = useContext(themeContext)
@@ -14,7 +14,6 @@ export default function Header() {
     onSuccess: () => {
       setIsAuthenicated(false)
     }
-
   })
   const handleLogout = () => {
     logoutMutation.mutate()
@@ -23,13 +22,17 @@ export default function Header() {
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
       <div className='container'>
         <div className='flex justify-end'>
-          <Popover className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
-            renderPopover={<div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
-              <div className='flex flex-col py-2 px-3'>
-                <button className='py-2 px-3 hover:text-orange'>Tiếng Việt</button>
-                <button className='py-2 px-3 hover:text-orange mt-2'>English</button>
+          <Popover
+            className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
+            renderPopover={
+              <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
+                <div className='flex flex-col py-2 px-3'>
+                  <button className='py-2 px-3 hover:text-orange'>Tiếng Việt</button>
+                  <button className='py-2 px-3 hover:text-orange mt-2'>English</button>
+                </div>
               </div>
-            </div>}>
+            }
+          >
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -56,38 +59,44 @@ export default function Header() {
               <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
             </svg>
           </Popover>
-          {isAuthenicated && <Popover
-            className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'
-            renderPopover={
-              <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
-                <Link
-                  to={path.home}
-                  className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
-                >
-                  Tài khoản của tôi
-                </Link>
-                <Link
-                  to={path.home}
-                  className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
-                >
-                  Đơn mua
-                </Link>
-                <button className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left' onClick={handleLogout}>
-                  Đăng xuất
-                </button>
+          {isAuthenicated && (
+            <Popover
+              className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'
+              renderPopover={
+                <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
+                  <Link
+                    to={path.home}
+                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                  >
+                    Tài khoản của tôi
+                  </Link>
+                  <Link
+                    to={path.home}
+                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                  >
+                    Đơn mua
+                  </Link>
+                  <button
+                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                    onClick={handleLogout}
+                  >
+                    Đăng xuất
+                  </button>
+                </div>
+              }
+            >
+              <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'>
+                <div className='w-6 h-6 mr-2 flex-shrink-0'>
+                  <img
+                    src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
+                    alt='avatar'
+                    className='w-full h-full object-cover rounded-full'
+                  />
+                </div>
+                <div>{profile?.email}</div>
               </div>
-            }>
-            <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'>
-              <div className='w-6 h-6 mr-2 flex-shrink-0'>
-                <img
-                  src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
-                  alt='avatar'
-                  className='w-full h-full object-cover rounded-full'
-                />
-              </div>
-              <div>{profile?.email}</div>
-            </div>
-          </Popover>}
+            </Popover>
+          )}
           {!isAuthenicated && (
             <div className='flex items-center'>
               <Link to='/register' className='mx-3 capitalize hover:text-white/70'>

@@ -1,5 +1,5 @@
 import type { RegisterOptions, UseFormGetValues } from 'react-hook-form'
-import * as yup from 'yup';
+import * as yup from 'yup'
 type Rules = { [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions }
 function testPriceMinMax(this: yup.TestContext<yup.AnyObject>) {
   const { price_max, price_min } = this.parent as { price_min: string; price_max: string }
@@ -46,11 +46,13 @@ export const getRules = (getValues?: any): Rules => {
         value: 6,
         message: 'Độ dài ký tự phải từ 6-160'
       },
-      validate: typeof getRules === 'function' ? ((value) => value === getValues('password') || "Confirm chưa giống với password") : undefined
-    },
+      validate:
+        typeof getRules === 'function'
+          ? (value) => value === getValues('password') || 'Confirm chưa giống với password'
+          : undefined
+    }
   }
 }
-
 
 export const schema = yup.object({
   email: yup
@@ -81,6 +83,5 @@ export const schema = yup.object({
     test: testPriceMinMax
   })
 })
-
 
 export type Schema = yup.InferType<typeof schema>

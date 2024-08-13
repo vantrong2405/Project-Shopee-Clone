@@ -39,12 +39,11 @@ export default function ProductList() {
     queryFn: () => categoryApi.getCategory(),
     placeholderData: keepPreviousData
   })
-  console.log(queryConfig);
   return (
     <div className='bg-gray-200 py-6'>
       <div className='container'>
-        {ProductsData &&
-          (<div className='grid grid-cols-12 gap-6'>
+        {ProductsData && (
+          <div className='grid grid-cols-12 gap-6'>
             <div className='col-span-3 bg-white px-6'>
               <AsideFilter queryConfig={queryConfig} categories={CategoryData?.data.data || []} />
             </div>
@@ -59,8 +58,8 @@ export default function ProductList() {
               </div>
               <Pagination queryConfig={queryConfig} pageSize={ProductsData?.data.data.pagination.page_size} />
             </div>
-          </div>)
-        }
+          </div>
+        )}
       </div>
     </div>
   )

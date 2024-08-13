@@ -1,22 +1,28 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from '@tanstack/react-query';
-import { useContext } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import authApi from 'src/apis/auth.api';
-import Button from 'src/Components/Button';
-import Input from 'src/Components/Input';
-import path from 'src/constants/path';
-import { themeContext } from 'src/context/app.context';
-import { ErrorResponse } from 'src/type/utils.type';
-import { getRules, Schema, schema } from 'src/utils/rules';
-import { isAxiosUnprocessableEntityError } from 'src/utils/utils';
+import authApi from 'src/apis/auth.api'
+import Button from 'src/Components/Button'
+import Input from 'src/Components/Input'
+import path from 'src/constants/path'
+import { themeContext } from 'src/context/app.context'
+import { ErrorResponse } from 'src/type/utils.type'
+import { getRules, Schema, schema } from 'src/utils/rules'
+import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
 export default function Login() {
   const { isAuthenicated, setIsAuthenicated } = useContext(themeContext)
   const navigate = useNavigate()
-  const { register, handleSubmit, formState: { errors }, setError, watch } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    watch
+  } = useForm<FormData>({
     resolver: yupResolver(loginSchema)
   })
 
@@ -24,7 +30,7 @@ export default function Login() {
 
   const loginAccountMutation = useMutation({
     mutationFn: (body: Omit<FormData, 'confirm_password'>) => authApi.loginAccount(body)
-  });
+  })
 
   const onSubmit = handleSubmit((data) => {
     loginAccountMutation.mutate(data, {
@@ -33,23 +39,23 @@ export default function Login() {
         navigate('/')
       },
       onError: (error) => {
-        console.log(error);
+        console.log(error)
 
         if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
-          const formError = error.response?.data.data;
+          const formError = error.response?.data.data
 
           if (formError) {
             Object.keys(formError).forEach((key) => {
               setError(key as keyof FormData, {
                 message: formError[key as keyof FormData],
                 type: 'Server'
-              });
-            });
+              })
+            })
           }
         }
       }
-    });
-  });
+    })
+  })
   return (
     <div className='bg-orange'>
       <div className='max-w-7xl mx-auto px-4'>
@@ -57,10 +63,30 @@ export default function Login() {
           <div className='lg:col-span-2 lg:col-start-4'>
             <form className='p-10 rounded bg-white shadow-sm' onSubmit={onSubmit}>
               <div className='text-2xl'>Đăng nhập</div>
-              <Input type='email' className='mt-8' placeholder='Email' register={register} rules={rules.email} name='email' />
-              <Input type='password' className='mt-3' placeholder='Password' register={register} rules={rules.password} name='password' autoComplete='on' />
+              <Input
+                type='email'
+                className='mt-8'
+                placeholder='Email'
+                register={register}
+                rules={rules.email}
+                name='email'
+              />
+              <Input
+                type='password'
+                className='mt-3'
+                placeholder='Password'
+                register={register}
+                rules={rules.password}
+                name='password'
+                autoComplete='on'
+              />
               <div className='mt-3'>
-                <Button disabled={loginAccountMutation.isPending} isLoading={loginAccountMutation.isPending} type='submit' className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center'>
+                <Button
+                  disabled={loginAccountMutation.isPending}
+                  isLoading={loginAccountMutation.isPending}
+                  type='submit'
+                  className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center'
+                >
                   Đăng nhập
                 </Button>
               </div>
