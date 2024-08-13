@@ -6,16 +6,14 @@ import productApi from 'src/apis/product.api'
 import { toast } from 'react-toastify'
 import ProductRating from 'src/Components/ProductRating'
 import QuantityController from 'src/Components/QuantityController/QuantityController'
-import { Product as ProductType, ProductListConfig } from 'src/type/product.type'
+import { Product } from 'src/type/product.type'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from 'src/utils/utils'
 import path from 'src/constants/path'
 import InputNumber from 'src/Components/InputNumber'
 
 
 export default function ProductDetail() {
-  const [buyCount, setBuyCount] = useState(1)
-  const { nameId } = useParams()
-  const id = getIdFromNameId(nameId as string)
+  const { id } = useParams()
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
     queryFn: () => productApi.getProductDetail(id as string)
@@ -23,22 +21,10 @@ export default function ProductDetail() {
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const [activeImage, setActiveImage] = useState('')
   const product = productDetailData?.data.data
-  const imageRef = useRef<HTMLImageElement>(null)
   const currentImages = useMemo(
     () => (product ? product.images.slice(...currentIndexImages) : []),
     [product, currentIndexImages]
   )
-  const queryConfig: ProductListConfig = { limit: '20', page: '1', category: product?.category._id }
-
-  const { data: productsData } = useQuery({
-    queryKey: ['products', queryConfig],
-    queryFn: () => {
-      return productApi.getProducts(queryConfig)
-    },
-    staleTime: 3 * 60 * 1000,
-    enabled: Boolean(product)
-  })
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (product && product.images.length > 0) {
@@ -47,7 +33,8 @@ export default function ProductDetail() {
   }, [product])
 
   const next = () => {
-    if (currentIndexImages[1] < (product as ProductType).images.length) {
+    console.log(currentIndexImages[1])
+    if (currentIndexImages[1] < (product as Product).images.length) {
       setCurrentIndexImages((prev) => [prev[0] + 1, prev[1] + 1])
     }
   }
@@ -61,41 +48,16 @@ export default function ProductDetail() {
   const chooseActive = (img: string) => {
     setActiveImage(img)
   }
-
-  const handleZoom = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const rect = event.currentTarget.getBoundingClientRect()
-    const image = imageRef.current as HTMLImageElement
-    const { naturalHeight, naturalWidth } = image
-    const offsetX = event.pageX - (rect.x + window.scrollX)
-    const offsetY = event.pageY - (rect.y + window.scrollY)
-
-    const top = offsetY * (1 - naturalHeight / rect.height)
-    const left = offsetX * (1 - naturalWidth / rect.width)
-    image.style.width = naturalWidth + 'px'
-    image.style.height = naturalHeight + 'px'
-    image.style.maxWidth = 'unset'
-    image.style.top = top + 'px'
-    image.style.left = left + 'px'
-  }
-
-  const handleRemoveZoom = () => {
-    imageRef.current?.removeAttribute('style')
-  }
-
-  const handleBuyCount = (value: number) => {
-    setBuyCount(value)
-  }
-
   if (!product) return null
   return (
     <div className='bg-gray-200 py-6'>
-      <div className='bg-white p-4 shadow'>
-        <div className='container'>
+      <div className='container'>
+        <div className='bg-white p-4 shadow'>
           <div className='grid grid-cols-12 gap-9'>
             <div className='col-span-5'>
               <div className='relative w-full pt-[100%] shadow'>
                 <img
-                  src={product.image}
+                  src={activeImage}
                   alt={product.name}
                   className='absolute top-0 left-0 h-full w-full bg-white object-cover'
                 />
@@ -113,12 +75,12 @@ export default function ProductDetail() {
                     <path strokeLinecap='round' strokeLinejoin='round' d='M15.75 19.5L8.25 12l7.5-7.5' />
                   </svg>
                 </button>
-                {product.images.slice(0, 5).map((img, index) => {
-                  const isActive = index === 0
+                {currentImages.map((img) => {
+                  const isActive = img === activeImage
                   return (
-                    <div className='relative w-full pt-[100%]' key={img}>
+                    <div className='relative w-full pt-[100%]' key={img} onMouseEnter={() => chooseActive(img)}>
                       <img
-                        src={product.image}
+                        src={img}
                         alt={product.name}
                         className='absolute top-0 left-0 h-full w-full cursor-pointer bg-white object-cover'
                       />
@@ -126,7 +88,10 @@ export default function ProductDetail() {
                     </div>
                   )
                 })}
-                <button className='absolute right-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'>
+                <button
+                  className='absolute right-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'
+                  onClick={next}
+                >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -235,8 +200,8 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
-      <div className='mt-8 bg-white p-4 shadow'>
-        <div className='container'>
+      <div className='container'>
+        <div className='mt-8 bg-white p-4 shadow'>
           <div className='rounded bg-gray-50 p-4 text-lg capitalize text-slate-700'>Mô tả sản phẩm</div>
           <div className='mx-4 mt-12 mb-4 text-sm leading-loose'>
             <div
