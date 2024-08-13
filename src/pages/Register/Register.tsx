@@ -13,13 +13,14 @@ import { useContext } from 'react';
 import Button from 'src/Components/Button';
 import path from 'src/constants/path';
 
-type FormData = Schema
+type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
+const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
 
 export default function Register() {
   const { isAuthenicated, setIsAuthenicated } = useContext(themeContext)
   const navigate = useNavigate()
   const { register, handleSubmit, formState: { errors }, getValues, setError } = useForm<FormData>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(registerSchema)
   });
 
   const registerAccountMutation = useMutation({
