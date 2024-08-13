@@ -5,12 +5,15 @@ import { useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import ProductRating from 'src/Components/ProductRating'
 import { Product } from 'src/type/product.type'
-import { formatCurrency, formatNumberToSocialStyle, rateSale } from 'src/utils/utils'
+import { formatCurrency, formatNumberToSocialStyle, rateSale, getIdFromNameId } from 'src/utils/utils'
 import InputNumber from 'src/Components/InputNumber'
 
 
 export default function ProductDetail() {
-  const { id } = useParams()
+  const { nameId } = useParams()
+
+  const id = getIdFromNameId(nameId as string)
+  console.log(id);
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
     queryFn: () => productApi.getProductDetail(id as string)
@@ -50,10 +53,6 @@ export default function ProductDetail() {
     const rect = event.currentTarget.getBoundingClientRect()
     const image = imageRef.current as HTMLImageElement
     const { naturalHeight, naturalWidth } = image
-    // Cách 1: Lấy offsetX, offsetY đơn giản khi chúng ta đã xử lý được bubble event
-    // const { offsetX, offsetY } = event.nativeEvent
-
-    // Cách 2: Lấy offsetX, offsetY khi chúng ta không xử lý được bubble event
     const offsetX = event.pageX - (rect.x + window.scrollX)
     const offsetY = event.pageY - (rect.y + window.scrollY)
 
