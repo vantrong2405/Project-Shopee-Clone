@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import { HttpStatusCode } from 'src/constants/httpStatusCode.enum'
-
+import { string } from 'yup'
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   // eslint-disable-next-line import/no-named-as-default-member
   return axios.isAxiosError(error)
@@ -33,7 +33,8 @@ const removeSpecialCharacter = (str: string) =>
 export const generateNameId = ({ name, id }: { name: string; id: string }) => {
   return removeSpecialCharacter(name).replace(/\s/g, '-') + `-i-${id}`
 }
+
 export const getIdFromNameId = (nameId: string) => {
   const arr = nameId.split('-i-')
-  return arr.length > 1 ? arr[1] : ''
+  return arr[arr.length - 1]
 }
