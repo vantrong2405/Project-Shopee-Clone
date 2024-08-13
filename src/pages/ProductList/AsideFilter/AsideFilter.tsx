@@ -51,10 +51,13 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
   const handleRemoveALl = () => {
     navigate({
       pathname: path.home,
-      search: createSearchParams(omit({
-        ...queryConfig,
-      }, ['rating_filter', 'category', 'price_max', 'price_min']),
-
+      search: createSearchParams(
+        omit(
+          {
+            ...queryConfig
+          },
+          ['rating_filter', 'category', 'price_max', 'price_min']
+        )
       ).toString()
     })
   }
@@ -186,7 +189,10 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
         <RatingStars queryConfig={queryConfig} />
       </ul>
       <div className='bg-gray-300 h-[1px] my-4' />
-      <Button onClick={handleRemoveALl} className='w-full p-2 uppercase bg-orange text-white text-sm hover:bg-orange/80 flex justify-center items-center'>
+      <Button
+        onClick={handleRemoveALl}
+        className='w-full p-2 uppercase bg-orange text-white text-sm hover:bg-orange/80 flex justify-center items-center'
+      >
         Xóa tất cả
       </Button>
     </div>

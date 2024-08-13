@@ -36,16 +36,16 @@ export default function Header() {
   const onSubmitSearch = handleSubmit((data) => {
     const config = queryConfig.order
       ? omit(
-        {
+          {
+            ...queryConfig,
+            name: data.name
+          },
+          ['order', 'sort_by']
+        )
+      : {
           ...queryConfig,
           name: data.name
-        },
-        ['order', 'sort_by']
-      )
-      : {
-        ...queryConfig,
-        name: data.name
-      }
+        }
     navigate({
       pathname: path.home,
       search: createSearchParams(config).toString()
@@ -154,7 +154,6 @@ export default function Header() {
             <div className='bg-white rounded-sm p-1 flex'>
               <input
                 type='text'
-                name='search'
                 className='text-black px-3 py-2 flex-grow border-none outline-none bg-transparent'
                 placeholder='Free Ship Đơn Từ 0Đ'
                 {...register('name')}
