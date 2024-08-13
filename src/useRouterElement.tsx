@@ -8,6 +8,7 @@ import MainLayout from './layouts/MainLayout'
 import { themeContext } from './context/app.context'
 import Profile from './Components/Profile'
 import path from './constants/path'
+import ProductDetail from './pages/ProductDetail'
 
 const protectedAuthenicated = () => {
   const { isAuthenicated } = useContext(themeContext)
@@ -21,6 +22,15 @@ const rejectAuthenicated = () => {
 
 export default function useRouterElement() {
   let routerElement = useRoutes([
+    {
+      path: path.productDetail,
+      index: true,
+      element: (
+        <MainLayout>
+          <ProductDetail />
+        </MainLayout>
+      )
+    },
     {
       path: path.home,
       element: (
