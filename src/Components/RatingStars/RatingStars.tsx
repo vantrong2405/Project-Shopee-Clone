@@ -17,12 +17,12 @@ export default function RatingStars({ queryConfig }: Props) {
       }).toString()
     })
   }
- 
+
   return Array(5)
     .fill(0)
     .map((_, index) => {
       return (
-        <li className='py-1 pl-2' key={index} >
+        <li className='py-1 pl-2' key={index}>
           <div className='flex items-center text-sm cursor-pointer' onClick={() => handleFilterRating(5 - index)}>
             {Array(5)
               .fill(0)

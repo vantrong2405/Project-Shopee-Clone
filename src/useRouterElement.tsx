@@ -1,3 +1,4 @@
+// useRouterElement.tsx
 import React, { useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import ProductList from './pages/ProductList'
@@ -24,7 +25,6 @@ export default function useRouterElement() {
   let routerElement = useRoutes([
     {
       path: path.productDetail,
-      index: true,
       element: (
         <MainLayout>
           <ProductDetail />
