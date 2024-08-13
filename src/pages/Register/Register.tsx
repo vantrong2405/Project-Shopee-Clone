@@ -1,17 +1,17 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { Link, useNavigate } from 'react-router-dom';
-import Input from 'src/Components/Input';
-import { getRules, schema, Schema } from 'src/utils/rules';
-import authApi from 'src/apis/auth.api';
-import { omit } from 'lodash';
-import { isAxiosUnprocessableEntityError } from 'src/utils/utils';
-import { ErrorResponse } from 'src/type/utils.type';
-import { themeContext } from 'src/context/app.context';
-import { useContext } from 'react';
-import Button from 'src/Components/Button';
-import path from 'src/constants/path';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+import { useMutation } from '@tanstack/react-query'
+import { Link, useNavigate } from 'react-router-dom'
+import Input from 'src/Components/Input'
+import { getRules, schema, Schema } from 'src/utils/rules'
+import authApi from 'src/apis/auth.api'
+import { omit } from 'lodash'
+import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
+import { ErrorResponse } from 'src/type/utils.type'
+import { themeContext } from 'src/context/app.context'
+import { useContext } from 'react'
+import Button from 'src/Components/Button'
+import path from 'src/constants/path'
 
 type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
 const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
@@ -19,39 +19,45 @@ const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
 export default function Register() {
   const { isAuthenicated, setIsAuthenicated } = useContext(themeContext)
   const navigate = useNavigate()
-  const { register, handleSubmit, formState: { errors }, getValues, setError } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    setError
+  } = useForm<FormData>({
     resolver: yupResolver(registerSchema)
-  });
+  })
 
   const registerAccountMutation = useMutation({
     mutationFn: (body: Omit<FormData, 'confirm_password'>) => authApi.registerAccount(body)
-  });
+  })
 
   const onSubmit = handleSubmit((data) => {
-    const body = omit(data, ['confirm_password']);
+    const body = omit(data, ['confirm_password'])
     registerAccountMutation.mutate(body, {
       onSuccess: () => {
         setIsAuthenicated(true)
         navigate(path.home)
       },
       onError: (error) => {
-        console.log(error);
+        console.log(error)
 
         if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<FormData, 'confirm_password'>>>(error)) {
-          const formError = error.response?.data.data;
+          const formError = error.response?.data.data
 
           if (formError) {
             Object.keys(formError).forEach((key) => {
               setError(key as keyof Omit<FormData, 'confirm_password'>, {
                 message: formError[key as keyof Omit<FormData, 'confirm_password'>] as string,
                 type: 'Server'
-              });
-            });
+              })
+            })
           }
         }
       }
-    });
-  });
+    })
+  })
 
   return (
     <div className='bg-orange'>
@@ -85,7 +91,12 @@ export default function Register() {
                 placeholder='Confirm Password'
               />
               <div className='mt-2'>
-                <Button disabled={registerAccountMutation.isPending} isLoading={registerAccountMutation.isPending} type='submit' className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center'>
+                <Button
+                  disabled={registerAccountMutation.isPending}
+                  isLoading={registerAccountMutation.isPending}
+                  type='submit'
+                  className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center'
+                >
                   Đăng nhập
                 </Button>
               </div>
@@ -100,5 +111,5 @@ export default function Register() {
         </div>
       </div>
     </div>
-  );
+  )
 }

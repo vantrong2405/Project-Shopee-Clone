@@ -1,5 +1,6 @@
 export default function ProductRating({ rating }: { rating: number }) {
-  const handleWidth = (order: number) => { // vị trí ngôi sao 
+  const handleWidth = (order: number) => {
+    // vị trí ngôi sao
     if (order <= rating) {
       return '100%'
     }

@@ -1,11 +1,11 @@
-import { createContext, Fragment, useState } from "react"
-import { User } from "src/type/user.type"
-import { getAccessTokenFromLS, getProfileFromLS } from "src/utils/auth"
+import { createContext, Fragment, useState } from 'react'
+import { User } from 'src/type/user.type'
+import { getAccessTokenFromLS, getProfileFromLS } from 'src/utils/auth'
 
 interface appContext {
   isAuthenicated: boolean
   setIsAuthenicated: React.Dispatch<React.SetStateAction<boolean>>
-  profile: User,
+  profile: User
   setProfile: React.Dispatch<React.SetStateAction<User>>
 }
 
@@ -23,20 +23,16 @@ export const AppContext = ({ children }: { children: React.ReactNode }) => {
   const [profile, setProfile] = useState<User>(initialContext.profile)
   return (
     <Fragment>
-      <themeContext.Provider value={{
-        isAuthenicated,
-        setIsAuthenicated,
-        profile,
-        setProfile
-      }}>
+      <themeContext.Provider
+        value={{
+          isAuthenicated,
+          setIsAuthenicated,
+          profile,
+          setProfile
+        }}
+      >
         {children}
       </themeContext.Provider>
-    </Fragment >
+    </Fragment>
   )
 }
-
-
-
-
-
-
