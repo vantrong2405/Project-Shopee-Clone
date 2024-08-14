@@ -1,6 +1,6 @@
-import { useQuery, } from '@tanstack/react-query'
+import { useMutation, useQuery, } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import { Product as ProductType, ProductListConfig } from 'src/type/product.type'
@@ -8,6 +8,8 @@ import ProductRating from 'src/Components/ProductRating'
 import { formatCurrency, formatNumberToSocialStyle, rateSale, getIdFromNameId } from 'src/utils/utils'
 import InputNumber from 'src/Components/InputNumber'
 import Product from 'src/Components/Product'
+import purchaseApi from 'src/apis/purchase.api'
+import { escape } from 'lodash'
 
 
 export default function ProductDetail() {
@@ -21,6 +23,7 @@ export default function ProductDetail() {
   })
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const [activeImage, setActiveImage] = useState('')
+  const [buyPurchase, setBuyPurchase] = useState<number>(1)
   const product = productDetailData?.data.data
   const imageRef = useRef<HTMLImageElement>(null)
   const currentImages = useMemo(
@@ -77,6 +80,26 @@ export default function ProductDetail() {
 
   const handleRemoveZoom = () => {
     imageRef.current?.removeAttribute('style')
+  }
+
+  const addToCartMutation = useMutation({
+    mutationFn: (body: { product_id: string; buy_count: number }) => purchaseApi.addToCart(body)
+  })
+
+  const handleAddtoCart = (productId: string) => {
+    const body = {
+      product_id: productId,
+      buy_count: buyPurchase
+    }
+    addToCartMutation.mutate(body)
+  }
+
+  const handleBuyPurchase = (type: string) => {
+    if (type === 'increase') {
+      setBuyPurchase((prev) => prev - 1);
+    } else {
+      setBuyPurchase((prev) => prev + 1);
+    }
   }
   if (!product) return null
   return (
@@ -167,25 +190,38 @@ export default function ProductDetail() {
               <div className='mt-8 flex items-center'>
                 <div className='capitalize text-gray-500'>Số lượng</div>
                 <div className='ml-10 flex items-center'>
-                  <button className='flex h-8 w-8 items-center justify-center rounded-l-sm border border-gray-300 text-gray-600'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      strokeWidth={1.5}
-                      stroke='currentColor'
-                      className='h-4 w-4'
-                    >
-                      <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 12h-15' />
-                    </svg>
-                  </button>
+                  {buyPurchase <= 1 ?
+                    <button className='flex h-8 w-8 items-center justify-center rounded-l-sm border border-gray-300 text-gray-600 cursor-not-allowed'>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        fill='none'
+                        viewBox='0 0 24 24'
+                        strokeWidth={1.5}
+                        stroke='currentColor'
+                        className='h-4 w-4'
+                      >
+                        <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 12h-15' />
+                      </svg>
+                    </button> :
+                    <button className='flex h-8 w-8 items-center justify-center rounded-l-sm border border-gray-300 text-gray-600' onClick={() => handleBuyPurchase('increase')}>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        fill='none'
+                        viewBox='0 0 24 24'
+                        strokeWidth={1.5}
+                        stroke='currentColor'
+                        className='h-4 w-4'
+                      >
+                        <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 12h-15' />
+                      </svg>
+                    </button>}
                   <InputNumber
-                    value={1}
+                    value={buyPurchase}
                     className=''
                     classNameError='hidden'
                     classNameInput='h-8 w-14 border-t border-b border-gray-300 p-1 text-center outline-none'
                   />
-                  <button className='flex h-8 w-8 items-center justify-center rounded-r-sm border border-gray-300 text-gray-600'>
+                  <button className='flex h-8 w-8 items-center justify-center rounded-r-sm border border-gray-300 text-gray-600' onClick={() => handleBuyPurchase('descrease')}>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       fill='none'
@@ -201,7 +237,7 @@ export default function ProductDetail() {
                 <div className='ml-6 text-sm text-gray-500'>{product.quantity} sản phẩm có sẵn</div>
               </div>
               <div className='mt-8 flex items-center'>
-                <button className='flex h-12 items-center justify-center rounded-sm border border-orange bg-orange/10 px-5 capitalize text-orange shadow-sm hover:bg-orange/5'>
+                <button className='flex h-12 items-center justify-center rounded-sm border border-orange bg-orange/10 px-5 capitalize text-orange shadow-sm hover:bg-orange/5' onClick={() => handleAddtoCart(product?._id)}>
                   <svg
                     enableBackground='new 0 0 15 15'
                     viewBox='0 0 15 15'

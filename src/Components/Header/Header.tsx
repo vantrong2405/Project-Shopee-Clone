@@ -1,7 +1,7 @@
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
 import Popover from '../Poppover'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
 import { themeContext } from 'src/context/app.context'
 import path from 'src/constants/path'
@@ -10,8 +10,12 @@ import useQueryConfig from 'src/hook/useQueryConfig'
 import { schema, Schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { omit } from 'lodash'
+import purchaseApi from 'src/apis/purchase.api'
+import { purchasesStatus } from 'src/constants/purchase'
+import { formatCurrency } from 'src/utils/utils'
 type FormData = Pick<Schema, 'name'>
 const nameSchema = schema.pick(['name'])
+const LIMIT = 5
 export default function Header() {
   const queryConfig = useQueryConfig()
   const { register, handleSubmit } = useForm<FormData>({
@@ -36,21 +40,29 @@ export default function Header() {
   const onSubmitSearch = handleSubmit((data) => {
     const config = queryConfig.order
       ? omit(
-          {
-            ...queryConfig,
-            name: data.name
-          },
-          ['order', 'sort_by']
-        )
-      : {
+        {
           ...queryConfig,
           name: data.name
-        }
+        },
+        ['order', 'sort_by']
+      )
+      : {
+        ...queryConfig,
+        name: data.name
+      }
     navigate({
       pathname: path.home,
       search: createSearchParams(config).toString()
     })
   })
+
+  const { data: purchasesInCartData } = useQuery({
+    queryKey: ['purchases', { status: purchasesStatus.inCart }],
+    queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart })
+  })
+  const purchasesInCart = purchasesInCartData?.data.data
+  console.log('>>>', purchasesInCart);
+
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
       <div className='container'>
@@ -180,102 +192,39 @@ export default function Header() {
             <Popover
               renderPopover={
                 <div className='bg-white relative shadow-md rounded-sm border border-gray-200 max-w-[400px] text-sm'>
-                  <div className='p-2'>
-                    <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
-                    <div className='mt-5'>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://cf.shopee.vn/file/sg-11134201-22110-s3ycuwtvgvjvb4_tn'
-                            alt='anh'
-                            className='w-11 h-11 object-cover'
-                          />
-                        </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy SUNHOUSE SH334 16, 20, 24 cm
+                  {purchasesInCart &&
+                    <div className='p-2'>
+                      <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
+                      <div className='mt-5'>
+                        {purchasesInCart.slice(0, LIMIT).map((purchase) => (
+                          <div className='mt-4 flex' key={purchase._id}>
+                            <div className='flex-shrink-0'>
+                              <img
+                                src={purchase.product.images[0]}
+                                alt={purchase.product.name}
+                                className='w-11 h-11 object-cover'
+                              />
+                            </div>
+                            <div className='flex-grow ml-2 overflow-hidden'>
+                              <div className='truncate'>
+
+                                {purchase.product.name}
+                              </div>
+                            </div>
+                            <div className='ml-2 flex-shrink-0'>
+                              <span className='text-orange'>{formatCurrency(purchase.product.price)}đ</span>
+                            </div>
                           </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫469.000</span>
-                        </div>
+                        ))}
                       </div>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://cf.shopee.vn/file/sg-11134201-22110-s3ycuwtvgvjvb4_tn'
-                            alt='anh'
-                            className='w-11 h-11 object-cover'
-                          />
-                        </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy SUNHOUSE SH334 16, 20, 24 cm
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫469.000</span>
-                        </div>
+                      <div className='flex mt-6 items-center justify-between'>
+                        <div className='capitalize text-xs text-gray-500'>{purchasesInCart.length > 5 ? ` ${purchasesInCart.length - LIMIT} sản phẩm trong giỏ hàng` : 'Thêm hàng vào giỏ'}</div>
+                        <button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
+                          Xem giỏ hàng
+                        </button>
                       </div>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://cf.shopee.vn/file/sg-11134201-22110-s3ycuwtvgvjvb4_tn'
-                            alt='anh'
-                            className='w-11 h-11 object-cover'
-                          />
-                        </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy SUNHOUSE SH334 16, 20, 24 cm
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫469.000</span>
-                        </div>
-                      </div>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://cf.shopee.vn/file/sg-11134201-22110-s3ycuwtvgvjvb4_tn'
-                            alt='anh'
-                            className='w-11 h-11 object-cover'
-                          />
-                        </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy SUNHOUSE SH334 16, 20, 24 cm
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫469.000</span>
-                        </div>
-                      </div>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://cf.shopee.vn/file/sg-11134201-22110-s3ycuwtvgvjvb4_tn'
-                            alt='anh'
-                            className='w-11 h-11 object-cover'
-                          />
-                        </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy SUNHOUSE SH334 16, 20, 24 cm
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫469.000</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className='flex mt-6 items-center justify-between'>
-                      <div className='capitalize text-xs text-gray-500'>Thêm hàng vào giỏ</div>
-                      <button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
-                        Xem giỏ hàng
-                      </button>
-                    </div>
-                  </div>
+                    </div>}
+
                 </div>
               }
             >
