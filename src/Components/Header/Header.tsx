@@ -219,9 +219,9 @@ export default function Header() {
                       </div>
                       <div className='flex mt-6 items-center justify-between'>
                         <div className='capitalize text-xs text-gray-500'>{purchasesInCart.length > 5 ? ` ${purchasesInCart.length - LIMIT} sản phẩm trong giỏ hàng` : 'Thêm hàng vào giỏ'}</div>
-                        <button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
+                        <Link to={path.cart} className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white' >
                           Xem giỏ hàng
-                        </button>
+                        </Link>
                       </div>
                     </div>}
 
