@@ -12,6 +12,7 @@ import classNames from 'classnames'
 import Button from 'src/Components/Button'
 import RatingStars from 'src/Components/RatingStars'
 import { omit } from 'lodash'
+import InputV2 from 'src/Components/InputV2'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]

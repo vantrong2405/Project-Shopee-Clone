@@ -212,7 +212,7 @@ export default function Header() {
                               </div>
                             </div>
                             <div className='ml-2 flex-shrink-0'>
-                              <span className='text-orange'>{formatCurrency(purchase.product.price)}đ</span>
+                              <span className='text-orange'>đ{formatCurrency(purchase.product.price)}</span>
                             </div>
                           </div>
                         ))}
