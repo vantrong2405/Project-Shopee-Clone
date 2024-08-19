@@ -61,7 +61,6 @@ export default function Header() {
     queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart })
   })
   const purchasesInCart = purchasesInCartData?.data.data
-  console.log('>>>', purchasesInCart);
 
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
