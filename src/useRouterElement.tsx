@@ -11,6 +11,7 @@ import Profile from './Components/Profile'
 import path from './constants/path'
 import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
+import CartLayout from './layouts/CartLayout'
 
 const protectedAuthenicated = () => {
   const { isAuthenicated } = useContext(themeContext)
@@ -55,9 +56,9 @@ export default function useRouterElement() {
         {
           path: path.cart,
           element: (
-            <MainLayout>
+            <CartLayout>
               <Cart />
-            </MainLayout>
+            </CartLayout>
           )
         },
       ]
