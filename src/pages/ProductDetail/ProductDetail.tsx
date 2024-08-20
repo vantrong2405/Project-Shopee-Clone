@@ -1,7 +1,7 @@
 import { useMutation, useQuery, } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import { Product as ProductType, ProductListConfig } from 'src/type/product.type'
 import ProductRating from 'src/Components/ProductRating'
@@ -10,13 +10,14 @@ import InputNumber from 'src/Components/InputNumber'
 import Product from 'src/Components/Product'
 import purchaseApi from 'src/apis/purchase.api'
 import { escape } from 'lodash'
+import path from 'src/constants/path'
 
 
 export default function ProductDetail() {
+  const navigate = useNavigate()
   const { nameId } = useParams()
 
   const id = getIdFromNameId(nameId as string)
-  console.log(id);
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
     queryFn: () => productApi.getProductDetail(id as string)
@@ -92,6 +93,20 @@ export default function ProductDetail() {
       buy_count: buyPurchase
     }
     addToCartMutation.mutate(body)
+  }
+
+  const handleBuyNow = async () => {
+    const body = {
+      product_id: product?._id as string,
+      buy_count: buyPurchase
+    }
+    const res = await addToCartMutation.mutateAsync(body)
+    const purchase = res.data.data
+    navigate(path.cart, {
+      state: {
+        purchaseId: purchase._id
+      }
+    })
   }
 
   const handleBuyPurchase = (type: string) => {
@@ -263,7 +278,8 @@ export default function ProductDetail() {
                   </svg>
                   Thêm vào giỏ hàng
                 </button>
-                <button className='fkex ml-4 h-12 min-w-[5rem] items-center justify-center rounded-sm bg-orange px-5 capitalize text-white shadow-sm outline-none hover:bg-orange/90'>
+                <button className='flex ml-4 h-12 min-w-[5rem] items-center justify-center rounded-sm bg-orange px-5 capitalize text-white shadow-sm outline-none hover:bg-orange/90'
+                  onClick={handleBuyNow}>
                   Mua ngay
                 </button>
               </div>
