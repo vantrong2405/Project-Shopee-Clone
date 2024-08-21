@@ -76,7 +76,11 @@ export default function useRouteElements() {
             {
               path: path.changePassword,
               element: <ChangePassword />
-            }
+            },
+            {
+              path: path.historyPurchase,
+              element: <HistoryPurchase />
+            },
           ]
         }
       ]
