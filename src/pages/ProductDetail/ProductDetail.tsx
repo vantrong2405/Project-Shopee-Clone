@@ -1,4 +1,4 @@
-import { useMutation, useQuery, } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient, } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -16,7 +16,7 @@ import path from 'src/constants/path'
 export default function ProductDetail() {
   const navigate = useNavigate()
   const { nameId } = useParams()
-
+  const queryClient = useQueryClient()
   const id = getIdFromNameId(nameId as string)
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
