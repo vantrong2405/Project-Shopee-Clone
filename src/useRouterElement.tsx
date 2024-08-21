@@ -1,4 +1,3 @@
-// useRouterElement.tsx
 import React, { useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import ProductList from './pages/ProductList'
@@ -12,60 +11,25 @@ import path from './constants/path'
 import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
 import CartLayout from './layouts/CartLayout'
+import UserLayout from './layouts/UserLayout'
+import ChangePassword from './pages/User/pages/ChangePassword'
+import HistoryPurchase from './pages/User/pages/HistoryPurchase'
 
-const protectedAuthenicated = () => {
+const ProtectedRoute = () => {
   const { isAuthenicated } = useContext(themeContext)
   return isAuthenicated ? <Outlet /> : <Navigate to={path.login} />
 }
 
-const rejectAuthenicated = () => {
+const RejectedRoute = () => {
   const { isAuthenicated } = useContext(themeContext)
   return !isAuthenicated ? <Outlet /> : <Navigate to={path.home} />
 }
 
-export default function useRouterElement() {
-  let routerElement = useRoutes([
-    {
-      path: path.productDetail,
-      element: (
-        <MainLayout>
-          <ProductDetail />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.home,
-      element: (
-        <MainLayout>
-          <ProductList />
-        </MainLayout>
-      )
-    },
+export default function useRouteElements() {
+  const routeElements = useRoutes([
     {
       path: '',
-      element: protectedAuthenicated(),
-      children: [
-        {
-          path: path.profile,
-          element: (
-            <MainLayout>
-              <Profile />
-            </MainLayout>
-          )
-        },
-        {
-          path: path.cart,
-          element: (
-            <CartLayout>
-              <Cart />
-            </CartLayout>
-          )
-        },
-      ]
-    },
-    {
-      path: '',
-      element: rejectAuthenicated(),
+      element: <RejectedRoute />,
       children: [
         {
           path: path.login,
@@ -84,7 +48,56 @@ export default function useRouterElement() {
           )
         }
       ]
+    },
+    {
+      path: '',
+      element: <ProtectedRoute />,
+      children: [
+        {
+          path: path.cart,
+          element: (
+            <CartLayout>
+              <Cart />
+            </CartLayout>
+          )
+        },
+        {
+          path: path.user,
+          element: (
+            <MainLayout>
+              <UserLayout />
+            </MainLayout>
+          ),
+          children: [
+            {
+              path: path.profile,
+              element: <Profile />
+            },
+            {
+              path: path.changePassword,
+              element: <ChangePassword />
+            }
+          ]
+        }
+      ]
+    },
+    {
+      path: path.productDetail,
+      element: (
+        <MainLayout>
+          <ProductDetail />
+        </MainLayout>
+      )
+    },
+    {
+      path: '',
+      index: true,
+      element: (
+        <MainLayout>
+          <ProductList />
+        </MainLayout>
+      )
     }
   ])
-  return routerElement
+  return routeElements
 }
