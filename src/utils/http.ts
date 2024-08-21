@@ -3,8 +3,7 @@ import { HttpStatusCode } from 'src/constants/httpStatusCode.enum'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import {
-  clearAccessTokenFromLS,
-  clearProfileFromLS,
+  clearLS,
   getAccessTokenFromLS,
   setAccessTokenToLS,
   setProfileToLS
@@ -42,8 +41,7 @@ class Http {
           setProfileToLS(data.data.user)
         } else if (url === path.logout) {
           this.accessToken = ''
-          clearAccessTokenFromLS()
-          clearProfileFromLS()
+          clearLS()
         }
         return response
       },
@@ -51,6 +49,9 @@ class Http {
         if (error?.response.status !== HttpStatusCode.UnprocessableEntity) {
           const message = error.response.data.message || error.message
           toast.error(message)
+        }
+        if (error?.response.status === HttpStatusCode.Unauthorized) {
+          clearLS()
         }
         return Promise.reject(error)
       }

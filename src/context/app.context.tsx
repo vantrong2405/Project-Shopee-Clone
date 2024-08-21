@@ -9,10 +9,11 @@ interface ExtendedPurchase extends Purchase {
 interface appContext {
   isAuthenicated: boolean
   setIsAuthenicated: React.Dispatch<React.SetStateAction<boolean>>
-  profile: User
-  setProfile: React.Dispatch<React.SetStateAction<User>>
+  profile: User | null
+  setProfile: React.Dispatch<React.SetStateAction<User | null>>
   extendedPurchases: ExtendedPurchase[]
   setExtendedPurchases: React.Dispatch<React.SetStateAction<ExtendedPurchase[]>>
+  reset: () => void
 }
 
 const initialContext: appContext = {
@@ -21,15 +22,22 @@ const initialContext: appContext = {
   profile: getProfileFromLS(),
   setProfile: () => null,
   extendedPurchases: [],
-  setExtendedPurchases: () => null
+  setExtendedPurchases: () => null,
+  reset: () => null
 }
 
 export const themeContext = createContext<appContext>(initialContext)
 
 export const AppContext = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenicated, setIsAuthenicated] = useState<boolean>(initialContext.isAuthenicated)
-  const [profile, setProfile] = useState<User>(initialContext.profile)
+  const [profile, setProfile] = useState<User | null>(initialContext.profile)
   const [extendedPurchases, setExtendedPurchases] = useState<ExtendedPurchase[]>(initialContext.extendedPurchases)
+  const reset = () => {
+    setIsAuthenicated(false)
+    setProfile(null)
+    setExtendedPurchases([])
+
+  }
   return (
     <Fragment>
       <themeContext.Provider
@@ -39,7 +47,8 @@ export const AppContext = ({ children }: { children: React.ReactNode }) => {
           profile,
           setProfile,
           extendedPurchases,
-          setExtendedPurchases
+          setExtendedPurchases,
+          reset
         }}
       >
         {children}
