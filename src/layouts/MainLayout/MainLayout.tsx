@@ -1,4 +1,4 @@
-import React, { Fragment, ReactNode } from 'react'
+import { Fragment, ReactNode } from 'react'
 import Footer from 'src/Components/Footer'
 import Header from 'src/Components/Header'
 interface Props {

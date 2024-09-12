@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import path from 'src/constants/path'
 import { useContext } from 'react'
 import { themeContext } from 'src/context/app.context'
-import userImage from '../../../../assets/images/user.png'
 import { getAvatarUrl } from 'src/utils/utils'
 export default function UserSideNav() {
   const { profile } = useContext(themeContext)

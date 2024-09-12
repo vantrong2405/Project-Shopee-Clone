@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import Footer from 'src/Components/Footer'
 import RegisterHeader from 'src/Components/RegisterHeader'
 interface Props {

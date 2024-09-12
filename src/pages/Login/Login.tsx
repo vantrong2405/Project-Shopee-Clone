@@ -14,14 +14,12 @@ import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
 export default function Login() {
-  const { isAuthenicated, setIsAuthenicated } = useContext(themeContext)
+  const { setIsAuthenicated } = useContext(themeContext)
   const navigate = useNavigate()
   const {
     register,
     handleSubmit,
-    formState: { errors },
     setError,
-    watch
   } = useForm<FormData>({
     resolver: yupResolver(loginSchema)
   })

@@ -1,33 +1,15 @@
-import { createSearchParams, Link, useNavigate } from 'react-router-dom'
-import { useContext, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Popover from '../Poppover'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import authApi from 'src/apis/auth.api'
-import { themeContext } from 'src/context/app.context'
+import {  useQuery } from '@tanstack/react-query'
 import path from 'src/constants/path'
-import { useForm } from 'react-hook-form'
-import useQueryConfig from 'src/hook/useQueryConfig'
-import { schema, Schema } from 'src/utils/rules'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { omit } from 'lodash'
 import purchaseApi from 'src/apis/purchase.api'
 import { purchasesStatus } from 'src/constants/purchase'
 import { formatCurrency } from 'src/utils/utils'
 import NavHeader from '../NavHeader/NavHeader'
 import useSearchProducts from 'src/hook/useSearchProducts'
-type FormData = Pick<Schema, 'name'>
-const nameSchema = schema.pick(['name'])
 const LIMIT = 5
 export default function Header() {
-  const { isAuthenicated, setIsAuthenicated, profile } = useContext(themeContext)
   const { onSubmitSearch, register } = useSearchProducts()
-  const logoutMutation = useMutation({
-    mutationFn: authApi.logoutAccount,
-    onSuccess: () => {
-      setIsAuthenicated(false)
-    }
-  })
-
 
   const { data: purchasesInCartData } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
