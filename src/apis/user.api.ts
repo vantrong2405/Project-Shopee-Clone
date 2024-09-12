@@ -1,15 +1,17 @@
-import { User } from "src/type/user.type"
-import { SuccessResponse } from "src/type/utils.type"
-import http from "src/utils/http"
-interface updateProfile extends Omit<User, '_id' | 'roles' | 'createdAt' | 'updatedAt' | 'email'> {
+import { User } from 'src/type/user.type'
+import { SuccessResponse } from 'src/type/utils.type'
+import http from 'src/utils/http'
+
+interface BodyUpdateProfile extends Omit<User, '_id' | 'roles' | 'createdAt' | 'updatedAt' | 'email'> {
   password?: string
-  changePassword?: string
+  newPassword?: string
 }
-const userAPi = {
+
+const userApi = {
   getProfile() {
     return http.get<SuccessResponse<User>>('me')
   },
-  updateProfile(body: updateProfile) {
+  updateProfile(body: BodyUpdateProfile) {
     return http.put<SuccessResponse<User>>('user', body)
   },
   uploadAvatar(body: FormData) {
@@ -21,5 +23,4 @@ const userAPi = {
   }
 }
 
-
-export default userAPi
+export default userApi
