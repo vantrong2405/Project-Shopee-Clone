@@ -9,13 +9,14 @@ import {
   setProfileToLS
 } from './auth'
 import path from 'src/constants/path'
+import config from 'src/constants/config'
 class Http {
   instance: AxiosInstance
   private accessToken: string
   constructor() {
     this.accessToken = getAccessTokenFromLS()
     this.instance = axios.create({
-      baseURL: 'https://api-ecom.duthanhduoc.com/',
+      baseURL: config.baseUrl,
       timeout: 1000 * 10,
       headers: {
         'Content-Type': 'application/json'
@@ -47,7 +48,8 @@ class Http {
       },
       function (error) {
         if (error?.response.status !== HttpStatusCode.UnprocessableEntity) {
-          const message = error.response.data.message || error.message
+          const data: any | undefined = error.response?.data
+          const message = data?.message || error.message
           toast.error(message)
         }
         if (error?.response.status === HttpStatusCode.Unauthorized) {
