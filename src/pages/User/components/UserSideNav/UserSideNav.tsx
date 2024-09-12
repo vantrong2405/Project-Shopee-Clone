@@ -35,19 +35,19 @@ export default function UserSideNav() {
       <div className='mt-7'>
         <Link to={path.profile} className='flex items-center capitalize text-orange transition-colors'>
           <div className='mr-3 h-[22px] w-[22px]'>
-            <img src='https://cf.shopee.vn/file/ba61750a46794d8847c3f463c5e71cc4' alt='' className='h-full w-full' />
+            <img src='https://img.favpng.com/1/4/11/portable-network-graphics-computer-icons-google-account-scalable-vector-graphics-computer-file-png-favpng-HScCJdtkakJXsS3T27RyikZiD.jpg' alt='' className='h-full w-full' />
           </div>
           Tài khoản của tôi
         </Link>
         <Link to={path.changePassword} className='mt-4 flex items-center capitalize text-gray-600 transition-colors'>
           <div className='mr-3 h-[22px] w-[22px]'>
-            <img src='https://cf.shopee.vn/file/ba61750a46794d8847c3f463c5e71cc4' alt='' className='h-full w-full' />
+            <img src='https://www.pngfind.com/pngs/m/202-2021961_png-file-svg-change-password-line-icon-transparent.png' alt='' className='h-full w-full' />
           </div>
           Đổi mật khẩu
         </Link>
         <Link to={path.historyPurchase} className='mt-4 flex items-center capitalize text-gray-600 transition-colors'>
           <div className='mr-3 h-[22px] w-[22px]'>
-            <img src='https://cf.shopee.vn/file/f0049e9df4e536bc3e7f140d071e9078' alt='' className='h-full w-full' />
+            <img src='https://www.clipartmax.com/png/middle/173-1736169_receipt-comments-purchase-invoice-icon-png.png' alt='' className='h-full w-full' />
           </div>
           Đơn mua
         </Link>
