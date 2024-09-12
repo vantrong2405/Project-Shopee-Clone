@@ -7,18 +7,19 @@ import Button from 'src/Components/Button'
 import Input from 'src/Components/Input'
 import InputNumber from 'src/Components/InputNumber'
 import { userSchema, UserSchema } from 'src/utils/rules'
-import DateSelect from 'src/pages/User/components/DateSelect'
+import DateSelect from '../../components/DateSelect'
 
 type FormData = Pick<UserSchema, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
 
 const profileSchema = userSchema.pick(['name', 'address', 'phone', 'date_of_birth', 'avatar'])
+
 export default function Profile() {
   const { data: profileData } = useQuery({
     queryKey: ['profile'],
     queryFn: userApi.getProfile
   })
   const profile = profileData?.data.data
-  // const updateProfileMutation = useMutation(userApi.updateProfile)
+  const updateProfileMutation = useMutation(userApi.updateProfile)
   const {
     register,
     control,
@@ -55,7 +56,8 @@ export default function Profile() {
 
   const value = watch()
 
-  // console.log(value, errors)  
+  // console.log(value, errors)
+
   return (
     <div className='rounded-sm bg-white px-2 pb-10 shadow md:px-7 md:pb-20'>
       <div className='border-b border-b-gray-200 py-6'>
@@ -108,7 +110,7 @@ export default function Profile() {
                 register={register}
                 name='address'
                 placeholder='Địa chỉ'
-                errorMessage={errors.name?.message}
+                errorMessage={errors.address?.message}
               />
             </div>
           </div>
@@ -137,7 +139,7 @@ export default function Profile() {
               <img
                 src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
                 alt=''
-                className='w-full rounded-full object-cover'
+                className=' w-full rounded-full object-cover'
               />
             </div>
             <input className='hidden' type='file' accept='.jpg,.jpeg,.png' />
@@ -153,7 +155,7 @@ export default function Profile() {
             </div>
           </div>
         </div>
-      </form >
-    </div >
+      </form>
+    </div>
   )
 }
