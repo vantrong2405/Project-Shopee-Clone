@@ -8,6 +8,7 @@ import { QueryClient } from '@tanstack/react-query';
 import Popover from '../Poppover'
 import { themeContext } from 'src/context/app.context'
 import userImage from '../../assets/images/user.png'
+import { getAvatarUrl } from 'src/utils/utils'
 
 export default function NavHeader() {
   const { isAuthenicated, setIsAuthenicated, setProfile, profile } = useContext(themeContext) as any
@@ -88,7 +89,7 @@ export default function NavHeader() {
           }
         >
           <div className='mr-2 h-6 w-6 flex-shrink-0'>
-          <img src={profile?.avatar || userImage} alt='avatar' className='h-full w-full rounded-full object-cover' />
+          <img src={getAvatarUrl(profile?.avatar)} alt='avatar' className='h-full w-full rounded-full object-cover' />
           </div>
           <div>{profile?.email}</div>
         </Popover>
