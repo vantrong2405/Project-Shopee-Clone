@@ -1,5 +1,4 @@
-import React from 'react'
-import { createSearchParams, Link, useNavigate } from 'react-router-dom'
+import { createSearchParams, useNavigate } from 'react-router-dom'
 import path from 'src/constants/path'
 import { QueryConfig } from 'src/pages/ProductList/ProductList'
 interface Props {

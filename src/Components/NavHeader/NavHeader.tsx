@@ -7,7 +7,6 @@ import { purchasesStatus } from 'src/constants/purchase'
 import { QueryClient } from '@tanstack/react-query';
 import Popover from '../Poppover'
 import { themeContext } from 'src/context/app.context'
-import userImage from '../../assets/images/user.png'
 import { getAvatarUrl } from 'src/utils/utils'
 
 export default function NavHeader() {

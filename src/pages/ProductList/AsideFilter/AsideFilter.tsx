@@ -12,7 +12,6 @@ import classNames from 'classnames'
 import Button from 'src/Components/Button'
 import RatingStars from 'src/Components/RatingStars'
 import { omit } from 'lodash'
-import InputV2 from 'src/Components/InputV2'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
@@ -134,7 +133,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
       <div className='bg-gray-300 h-[1px] my-4' />
       <div className='my-5'>
         <div>Khoảng giá </div>
-        <form className='mt-2'>
+        <form className='mt-2' onSubmit={onSubmit}>
           <div className='flex items-start'>
             <Controller
               control={control}

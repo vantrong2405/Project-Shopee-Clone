@@ -7,15 +7,12 @@ import path from 'src/constants/path'
 import { purchasesStatus } from 'src/constants/purchase'
 import { formatCurrency, generateNameId } from 'src/utils/utils'
 import { Purchase } from 'src/type/purchase.type'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 import { produce } from 'immer'
 import { keyBy } from 'lodash'
 import { toast } from 'react-toastify'
 import { themeContext } from 'src/context/app.context'
-interface ExtendedPurchase extends Purchase {
-  disabled: boolean
-  checked: boolean
-}
+
 export default function Cart() {
   const { extendedPurchases, setExtendedPurchases } = useContext(themeContext)
   const { data: purchasesInCartData, refetch } = useQuery({
@@ -281,9 +278,7 @@ export default function Cart() {
             <button className='mx-3 border-none bg-none' onClick={handleCheckAll}>
               Chọn tất cả ({extendedPurchases.length})
             </button>
-            <button
-              className='bg-none text-black transition-colors hover:text-orange'
-            >
+            <button className='mx-3 border-none bg-none' onClick={handleDeleteManyPurchases}>
               Xóa
             </button>
           </div>

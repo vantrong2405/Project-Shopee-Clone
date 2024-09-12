@@ -1,6 +1,6 @@
-import { useMutation, useQuery, useQueryClient, } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {  useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import { Product as ProductType, ProductListConfig } from 'src/type/product.type'
@@ -9,14 +9,11 @@ import { formatCurrency, formatNumberToSocialStyle, rateSale, getIdFromNameId } 
 import InputNumber from 'src/Components/InputNumber'
 import Product from 'src/Components/Product'
 import purchaseApi from 'src/apis/purchase.api'
-import { escape } from 'lodash'
 import path from 'src/constants/path'
-
 
 export default function ProductDetail() {
   const navigate = useNavigate()
   const { nameId } = useParams()
-  const queryClient = useQueryClient()
   const id = getIdFromNameId(nameId as string)
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
@@ -137,7 +134,7 @@ export default function ProductDetail() {
                 />
               </div>
               <div className='relative mt-4 grid grid-cols-5 gap-1'>
-                <button className='absolute left-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'>
+                <button className='absolute left-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'   onClick={prev}>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'

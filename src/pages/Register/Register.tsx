@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import Input from 'src/Components/Input'
-import { getRules, schema, Schema } from 'src/utils/rules'
+import { schema, Schema } from 'src/utils/rules'
 import authApi from 'src/apis/auth.api'
 import { omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
@@ -17,13 +17,12 @@ type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
 const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
 
 export default function Register() {
-  const { isAuthenicated, setIsAuthenicated } = useContext(themeContext)
+  const { setIsAuthenicated } = useContext(themeContext)
   const navigate = useNavigate()
   const {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
     setError
   } = useForm<FormData>({
     resolver: yupResolver(registerSchema)
