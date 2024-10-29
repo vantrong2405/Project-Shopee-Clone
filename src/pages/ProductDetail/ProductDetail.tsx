@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
-import {  useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import { Product as ProductType, ProductListConfig } from 'src/type/product.type'
@@ -10,8 +10,9 @@ import InputNumber from 'src/Components/InputNumber'
 import Product from 'src/Components/Product'
 import purchaseApi from 'src/apis/purchase.api'
 import path from 'src/constants/path'
-
+import { useTranslation } from 'react-i18next'
 export default function ProductDetail() {
+  const { t } = useTranslation('product')
   const navigate = useNavigate()
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
@@ -134,7 +135,7 @@ export default function ProductDetail() {
                 />
               </div>
               <div className='relative mt-4 grid grid-cols-5 gap-1'>
-                <button className='absolute left-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'   onClick={prev}>
+                <button className='absolute left-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white' onClick={prev}>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -247,7 +248,7 @@ export default function ProductDetail() {
                     </svg>
                   </button>
                 </div>
-                <div className='ml-6 text-sm text-gray-500'>{product.quantity} sản phẩm có sẵn</div>
+                <div className='ml-6 text-sm text-gray-500'>{product.quantity} {t('available')}</div>
               </div>
               <div className='mt-8 flex items-center'>
                 <button className='flex h-12 items-center justify-center rounded-sm border border-orange bg-orange/10 px-5 capitalize text-orange shadow-sm hover:bg-orange/5' onClick={() => handleAddtoCart(product?._id)}>
