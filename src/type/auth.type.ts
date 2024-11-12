@@ -6,3 +6,12 @@ export type AuthResponse = SuccessResponse<{
   expires: string
   user: User
 }>
+
+export interface ExpiredTokenErrorData {
+  data: {
+    name: string;
+  };
+}
+
+
+export type RefreshTokenResponse = SuccessResponse<{ access_token: string }>
