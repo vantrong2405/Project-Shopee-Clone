@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { useContext, useTransition } from 'react'
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import authApi from 'src/apis/auth.api'
 import path from 'src/constants/path'
