@@ -12,7 +12,7 @@ import {
 import path from 'src/constants/path'
 import config from 'src/constants/config'
 import { RefreshTokenResponse } from 'src/type/auth.type'
-import { toast } from 'react-toastify'
+// import { toast } from 'react-toastify'
 import { isAxiosExpiredTokenError } from 'src/utils/utils'
 class Http {
   instance: AxiosInstance
