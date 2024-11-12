@@ -40,11 +40,8 @@ export default function Register() {
         navigate(path.home)
       },
       onError: (error) => {
-        console.log(error)
-
         if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<FormData, 'confirm_password'>>>(error)) {
           const formError = error.response?.data.data
-
           if (formError) {
             Object.keys(formError).forEach((key) => {
               setError(key as keyof Omit<FormData, 'confirm_password'>, {
