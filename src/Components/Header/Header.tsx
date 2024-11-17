@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import Popover from '../Poppover'
-import {  useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import path from 'src/constants/path'
 import purchaseApi from 'src/apis/purchase.api'
 import { purchasesStatus } from 'src/constants/purchase'
@@ -90,7 +90,7 @@ export default function Header() {
                         </Link>
                       </div>
                     </div> : <div className='flex h-[300px] w-[300px] flex-col items-center justify-center p-2'>
-                      <img src="https://fileinfo.com/img/ss/sm/jpg_44-2.jpg" alt='no purchase' className='h-24 w-24' />
+                      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgLNLbFmOl-wuybKGc6IrdKYGPxe62xr-wYA&s" alt='no purchase' className='h-24 w-24' />
                       <div className='mt-3 capitalize'>Chưa có sản phẩm</div>
                     </div>}
 

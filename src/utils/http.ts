@@ -39,7 +39,7 @@ class Http {
         return Promise.reject(error)
       }
     )
- 
+
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config;
@@ -58,11 +58,11 @@ class Http {
         return response
       },
       async (error) => {
-        // if (error?.response.status !== HttpStatusCode.UnprocessableEntity) {
-        //   const data: any | undefined = error.response?.data;
-        //   const message = data?.message || error.message;
-        //   toast.error(message)
-        // }
+        if (error?.response.status !== HttpStatusCode.UnprocessableEntity) {
+          const data: any | undefined = error.response?.data;
+          const message = data?.message || error.message;
+          toast.error(message)
+        }
         if (error?.response.status === HttpStatusCode.Unauthorized) {
           if (isAxiosExpiredTokenError(error)) {
             const newAccessToken = await this.handleRefreshToken()
@@ -82,7 +82,7 @@ class Http {
       const res = await this.instance.post<RefreshTokenResponse>('/refresh-access-token', {
         refresh_token: this.refreshToken,
       })
-      return res.data.data.access_token 
+      return res.data.data.access_token
   }
 }
 
