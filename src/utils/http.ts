@@ -12,7 +12,7 @@ import {
 import path from 'src/constants/path'
 import config from 'src/constants/config'
 import { RefreshTokenResponse } from 'src/type/auth.type'
-// import { toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { isAxiosExpiredTokenError } from 'src/utils/utils'
 class Http {
   instance: AxiosInstance
@@ -58,11 +58,11 @@ class Http {
         return response
       },
       async (error) => {
-        // if (error?.response.status !== HttpStatusCode.UnprocessableEntity) {
-        //   const data: any | undefined = error.response?.data;
-        //   const message = data?.message || error.message;
-        //   toast.error(message)
-        // }
+        if (error?.response.status !== HttpStatusCode.UnprocessableEntity) {
+          const data: any | undefined = error.response?.data;
+          const message = data?.message || error.message;
+          toast.error(message)
+        }
         if (error?.response.status === HttpStatusCode.Unauthorized) {
           if (isAxiosExpiredTokenError(error)) {
             const newAccessToken = await this.handleRefreshToken()
