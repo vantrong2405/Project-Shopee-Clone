@@ -12,6 +12,7 @@ import classNames from 'classnames'
 import Button from 'src/Components/Button'
 import RatingStars from 'src/Components/RatingStars'
 import { omit } from 'lodash'
+import { useTranslation } from 'react-i18next'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
@@ -20,11 +21,13 @@ interface Props {
 type FormData = NoUndefinedField<Pick<Schema, 'price_max' | 'price_min'>>
 const priceSchema = schema.pick(['price_min', 'price_max'])
 export default function AsideFilter({ queryConfig, categories }: Props) {
+  const { t } = useTranslation(['home'])
   const {
     control,
     handleSubmit,
     trigger,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm<FormData>({
     defaultValues: {
       price_min: '',
@@ -49,6 +52,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
   }
 
   const handleRemoveALl = () => {
+    reset()
     navigate({
       pathname: path.home,
       search: createSearchParams(
@@ -82,7 +86,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
             </g>
           </g>
         </svg>
-        Tất cả danh mục
+        {t('aside filter.all categories')}
       </Link>
       <div className='bg-gray-300 h-[1px] my-4' />
       <ul>
@@ -128,7 +132,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
             />
           </g>
         </svg>
-        Bộ lọc tìm kiếm
+        {t('aside filter.filter search')}
       </Link>
       <div className='bg-gray-300 h-[1px] my-4' />
       <div className='my-5'>
