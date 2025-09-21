@@ -14,6 +14,7 @@ import config from 'src/constants/config'
 import { RefreshTokenResponse } from 'src/type/auth.type'
 // import { toast } from 'react-toastify'
 import { isAxiosExpiredTokenError } from 'src/utils/utils'
+import { toast } from 'react-toastify'
 class Http {
   instance: AxiosInstance
   private accessToken: string
